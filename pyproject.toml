@@ -1,16 +1,26 @@
 [project]
 name = "data-service-processor"
 version = "0.1.0"
-description = "Add your description here"
+description = "Market data processor"
 readme = "README.md"
-authors = [
-    { name = "Maxime Filippini", email = "maxime.filippini@gmail.com" }
-]
+authors = [{ name = "Maxime Filippini", email = "maxime.filippini@gmail.com" }]
 requires-python = ">=3.13"
 dependencies = [
+    "boto3>=1.43.108",
     "fastapi>=0.142.2",
+    "httpx>=0.28.1",
+    "polars>=2.0.0",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "uvicorn[standard]>=0.54.0",
 ]
 
 [build-system]
 requires = ["uv_build>=0.9.21,<0.10.0"]
 build-backend = "uv_build"
+
+[project.scripts]
+processor = "data_service_processor.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=9.1.1", "ruff>=0.16.10"]
