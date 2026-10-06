@@ -6,8 +6,12 @@ this service calls those routes rather than maintaining another control plane.
 
 ## Run
 
-Install with `uv sync`. Set these environment variables (never bake secrets into
-the image):
+Install with `uv sync`. Configuration uses `pydantic-settings`: set the environment
+variables below or put them in a local `.env` file. Environment variables override
+`.env` values. URLs must be HTTP(S), credentials must be nonempty, and all
+processor settings are required before job execution. HTTP authentication also
+requires `PROCESSOR_API_TOKEN`; the CLI does not. Secret values are masked in
+settings representations. Never bake secrets into the image.
 
 | Variable | Purpose |
 | --- | --- |

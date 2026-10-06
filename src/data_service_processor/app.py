@@ -1,12 +1,13 @@
-import os
 import secrets
 from typing import Annotated
 
 import httpx
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from pydantic import ValidationError
 
 from .runtime import processor_runtime
+from .settings import HttpSettings
 
 app = FastAPI()
 bearer = HTTPBearer(auto_error=False)
@@ -15,9 +16,12 @@ bearer = HTTPBearer(auto_error=False)
 def authorize(
     credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)],
 ):
-    token = os.environ.get("PROCESSOR_API_TOKEN")
-    if not token:
-        raise HTTPException(503, "Processor authentication is not configured")
+    try:
+        token = HttpSettings().processor_api_token.get_secret_value()
+    except ValidationError as error:
+        raise HTTPException(
+            503, "Processor authentication is not configured"
+        ) from error
     if credentials is None or not secrets.compare_digest(
         credentials.credentials, token
     ):

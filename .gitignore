@@ -1,4 +1,6 @@
 # Python-generated files
+.env
+.env.*
 __pycache__/
 *.py[oc]
 build/
