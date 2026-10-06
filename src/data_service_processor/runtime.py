@@ -11,7 +11,7 @@ from .settings import ProcessorSettings
 
 @contextmanager
 def processor_runtime(settings: ProcessorSettings | None = None):
-    settings = settings if settings is not None else ProcessorSettings()
+    settings = settings if settings is not None else ProcessorSettings()  # pyright: ignore[reportCallIssue]
     s3 = boto3.client(
         "s3",
         endpoint_url=str(settings.r2_endpoint_url),

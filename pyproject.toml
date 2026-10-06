@@ -1,11 +1,9 @@
 [project]
 name = "data-service-processor"
 version = "0.1.0"
-description = "Frozen-job market data processor for Cloudflare Containers"
+description = "Market data processor"
 readme = "README.md"
-authors = [
-    { name = "Maxime Filippini", email = "maxime.filippini@gmail.com" }
-]
+authors = [{ name = "Maxime Filippini", email = "maxime.filippini@gmail.com" }]
 requires-python = ">=3.13"
 dependencies = [
     "boto3>=1.43.108",
@@ -25,7 +23,4 @@ build-backend = "uv_build"
 processor = "data_service_processor.cli:main"
 
 [dependency-groups]
-dev = [
-    "pytest>=9.1.1",
-    "ruff>=0.16.10",
-]
+dev = ["pytest>=9.1.1", "ruff>=0.16.10"]

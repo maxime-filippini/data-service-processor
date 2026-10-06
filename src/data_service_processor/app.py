@@ -17,7 +17,7 @@ def authorize(
     credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)],
 ):
     try:
-        token = HttpSettings().processor_api_token.get_secret_value()
+        token = HttpSettings().processor_api_token.get_secret_value()  # pyright: ignore[reportCallIssue]
     except ValidationError as error:
         raise HTTPException(
             503, "Processor authentication is not configured"
