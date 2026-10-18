@@ -75,13 +75,21 @@ uv run processor manifest.json          # one manifest, prints {"outputEtag": â€
 uv run uvicorn data_service_processor.app:app --port 8080
 ```
 
-The data-service Worker builds the container from this directory
-(`../data-service-processor` relative to the Worker repo). Cloudflare requires
-a `linux/amd64` image:
+Cloudflare requires a `linux/amd64` image:
 
 ```sh
 docker build --platform linux/amd64 -t market-data-processor .
 ```
+
+## Publishing
+
+Every push, on any branch, runs the checks below and then publishes the image
+to Cloudflare's registry as `data-service-processor:<full commit sha>`
+(`.github/workflows/publish-image.yml`). The run summary shows the full image
+reference. To use it, set that tag in both `containers` blocks of the
+data-service `wrangler.jsonc`.
+
+The workflow needs a `CLOUDFLARE_API_TOKEN` repository secret.
 
 ## Verification
 

@@ -1,0 +1,40 @@
+# Tests every push, then publishes the container image to Cloudflare's
+# registry as data-service-processor:<commit sha>. The data-service Worker
+# pins that tag in its wrangler.jsonc.
+name: Publish image
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - run: uv run ruff check src tests
+      - run: uv run ruff format --check src tests
+      - run: uv run pytest
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: 7161f73e7a5a97a5d2fe7ad26e7e28f9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build and push
+        run: npx --yes wrangler@4.145.0 containers build . --push --tag "data-service-processor:${GITHUB_SHA}"
+      - name: Summary
+        run: |
+          echo "Pushed \`registry.cloudflare.com/${CLOUDFLARE_ACCOUNT_ID}/data-service-processor:${GITHUB_SHA}\`" >> "$GITHUB_STEP_SUMMARY"
