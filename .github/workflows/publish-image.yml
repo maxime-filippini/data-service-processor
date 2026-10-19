@@ -37,4 +37,12 @@ jobs:
         run: npx --yes wrangler@4.145.0 containers build . --push --tag "data-service-processor:${GITHUB_SHA}"
       - name: Summary
         run: |
-          echo "Pushed \`registry.cloudflare.com/${CLOUDFLARE_ACCOUNT_ID}/data-service-processor:${GITHUB_SHA}\`" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "Pushed \`registry.cloudflare.com/${CLOUDFLARE_ACCOUNT_ID}/data-service-processor:${GITHUB_SHA}\`."
+            echo
+            echo "Pin it in data-service (add \`--dev\` for dev only):"
+            echo
+            echo '```sh'
+            echo "pnpm processor:pin ${GITHUB_SHA}"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

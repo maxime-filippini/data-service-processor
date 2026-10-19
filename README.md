@@ -85,9 +85,9 @@ docker build --platform linux/amd64 -t market-data-processor .
 
 Every push, on any branch, runs the checks below and then publishes the image
 to Cloudflare's registry as `data-service-processor:<full commit sha>`
-(`.github/workflows/publish-image.yml`). The run summary shows the full image
-reference. To use it, set that tag in both `containers` blocks of the
-data-service `wrangler.jsonc`.
+(`.github/workflows/publish-image.yml`). The run summary shows the command
+to pin it in data-service: `pnpm processor:pin <sha>`, with `--dev` to pin it
+for the dev environment only.
 
 The workflow needs a `CLOUDFLARE_API_TOKEN` repository secret.
 
